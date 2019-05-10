@@ -1,7 +1,6 @@
 const [Grey, Red, Yellow, Orange, Blue] = [0, 1, 2, 3, 4];
 
 const isEnemy = cell => {
-    
     if (cell !== Grey) {
         return true;
     } else {
@@ -9,30 +8,33 @@ const isEnemy = cell => {
     }
 };
 const adjacentCoordinates = (coordinates, width, height) => {
-    // TODO
     let x = coordinates[0];
     let y = coordinates[1];
     if (x === 0 && y === 0) {
         return [[x, y + 1], [x + 1, y]];
     } else if (x + 1 === width && y + 1 === height) {
         return [[x - 1, y], [x, y - 1]];
-    } else if (x > 0 && y === 0){
-        return [[x+1,y],[x,y+1], [x-1,y]];
-    } else if (x === 0 && y == 2) {
-        return [[x,y-1],[x+1,y]];
-    }  else if (x === 0 && y == 1) {
-        return [[x,y-1],[x+1,y], [x,y+1]];
-    } else if(y > x && y+1 === height) {
-        return [[x-1,y],[x,y-1],[x+1, y]];
+    } else if (x > 0 && y === 0) {
+        return [[x + 1, y], [x, y + 1], [x - 1, y]];
+    } else if (x === 0 && y === 2) {
+        return [[x, y - 1], [x + 1, y]];
+    } else if (x === 0 && y === 1) {
+        return [[x, y - 1], [x + 1, y], [x, y + 1]];
+    } else if (y > x && y + 1 === height) {
+        return [[x - 1, y], [x, y - 1], [x + 1, y]];
     } else {
-        return [[x - 1, y], [x+1, y], [x, y-1], [x, y + 1]];
+        return [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]];
     }
 };
 const isBoardComplete = board =>
     board.every(row => row.every(el => el === Grey));
 
 const changeAdjacentCellsRecursively = (board, x, y, clickedColor) => {
-    let coordinatepairs = adjacentCoordinates([x, y], board[0].length, board.length);
+    let coordinatepairs = adjacentCoordinates(
+        [x, y],
+        board[0].length,
+        board.length
+    );
     for (let coordinatepair of coordinatepairs) {
         let [adjx, adjy] = coordinatepair;
         if (board[adjy][adjx] === clickedColor) {
@@ -40,18 +42,14 @@ const changeAdjacentCellsRecursively = (board, x, y, clickedColor) => {
             changeAdjacentCellsRecursively(board, adjx, adjy, clickedColor);
         }
     }
-}
+};
 
 const generateNewBoard = (clickedColor, oldBoard) => {
-    // TODO
-
     for (let i = 0; i < oldBoard.length; i++) {
         let row = oldBoard[i];
-        let rowCount = oldBoard.length;
         for (let j = 0; j < row.length; j++) {
             let cell = row[j];
             if (cell === Grey) {
-                let width = row.length;
                 let x = j;
                 let y = i;
                 changeAdjacentCellsRecursively(oldBoard, x, y, clickedColor);
@@ -108,7 +106,7 @@ QUnit.module("Utility Functions", () => {
             );
             assert.deepEqual(
                 adjacentCoordinates([1, 2], 4, 3).sort(),
-                [[0, 2], [1, 1],[2,2]].sort(),
+                [[0, 2], [1, 1], [2, 2]].sort(),
                 "In the bottom middle area, three are adjacent"
             );
         }
