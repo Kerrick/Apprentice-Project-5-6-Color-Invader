@@ -60,6 +60,36 @@ const generateNewBoard = (clickedColor, oldBoard) => {
     return oldBoard;
 };
 
+// Game Play
+
+
+// Creating the board
+ let gameBoard = [[],[],[]];
+
+ function generateBoard(){
+     
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 QUnit.module("Utility Functions", () => {
     QUnit.test(
         "The isEnemy() function tests whether a color is an enemy",
