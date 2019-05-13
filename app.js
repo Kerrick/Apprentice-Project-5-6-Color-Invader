@@ -1,5 +1,6 @@
 const [Grey, Red, Yellow, Orange, Blue] = [0, 1, 2, 3, 4];
 
+
 const isEnemy = cell => {
     if (cell !== Grey) {
         return true;
@@ -21,6 +22,8 @@ const adjacentCoordinates = (coordinates, width, height) => {
     } else if (x === 0 && y === 1) {
         return [[x, y - 1], [x + 1, y], [x, y + 1]];
     } else if (y > x && y + 1 === height) {
+        return [[x - 1, y], [x, y - 1], [x + 1, y]];
+    } else if (y == x && y + 1 === height) {
         return [[x - 1, y], [x, y - 1], [x + 1, y]];
     } else {
         return [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]];
@@ -61,42 +64,61 @@ const generateNewBoard = (clickedColor, oldBoard) => {
     return oldBoard;
 };
 
-// Game Play
 
-generateBoard();
 
 // Creating the board
-let gameBoard;
+
 function generateBoard(){
      let rowMax = 3;
      let columnMax=4;
-     gameBoard = [[],[],[]];
+     let gameBoard = [[],[],[]];
      for (let i = 0; i <rowMax; i++){
          for(let j = 0; j < columnMax; j++){
-             gameBoard[i][j] = _.sample([0,1,2,3,4])
+             gameBoard[i][j] = _.sample([1,2,3,4])
          }
      }
-     gameBoard[0][0] = 0;
-     return gameBoard;
+     gameBoard[0][0] = 0; // Top left should aways be Grey
+        return gameBoard;
  }
+
+// Game Play Model
+
+let counter = 100;
+let board = generateBoard();
+let gameStatus = 'ongoing'; // values can be: ongoing, userWon, gameOver
+
+// Game Play controller
+
+function invader(clickedColor){
+    board = generateNewBoard(clickedColor,board);
+    counter -= 1;
+    isGameOver();
+}
+function isGameOver() {
+    let isComplete = isBoardComplete(board);
+    if(isComplete){
+        gameStatus = 'userWon';
+    } else if(!isComplete && counter == 0) {
+        gameStatus= 'gameOver';
+    } else {
+        gameStatus = 'ongoing';
+    }
+}
 
  // Listening for Button clicks
 
-let enemyButton = document.getElementByClassName("enemy-button");
-let counter = document.getElementById("counter")
-
-enemyButton.addEventListener("click", function(){
-   let clickedColor = this.innerHTML ;
-   generateNewBoard(clickedColor, gameBoard);
-    counter.innerHTML = parseInt(counter.innerHTML) - 1;
-   setInterval(onTimerTick, 3); // 3 milliseconds
-
-});
-
-function onTimerTick() {
-    isBoardComplete();
-    return oldBoard
-}
+// let enemyListener = document.getElementById("enemy-listener");
+// let counter = document.getElementById("counter")
+//
+// enemyListener.addEventListener("click", function(){
+//
+//
+// });
+//
+// function onTimerTick() {
+//     isBoardComplete(generateNewBoard(clickedColor, generateBoard()));
+//     // return oldBoard
+// }
 
 
 
@@ -248,6 +270,19 @@ QUnit.module("Game Board Functions", () => {
                     [Blue, Red, Yellow, Blue]
                 ],
                 "It changes nothing if there were no adjacent Red squares when Red was pressed"
+            );
+            assert.deepEqual(
+                generateNewBoard(1, [
+                    [0, 0, 0, 1],
+                    [0, 0, 1, 1],
+                    [0, 0, 1, 2]
+                ]),
+                [
+                    [0, 0, 0, 0],
+                    [0, 0, 0, 0],
+                    [0, 0, 0, 2]
+                ],
+                "It changes squares in all directions"
             );
             assert.deepEqual(
                 generateNewBoard(Red, [
