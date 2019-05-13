@@ -42,6 +42,7 @@ const changeAdjacentCellsRecursively = (board, x, y, clickedColor) => {
             changeAdjacentCellsRecursively(board, adjx, adjy, clickedColor);
         }
     }
+    return;
 };
 
 const generateNewBoard = (clickedColor, oldBoard) => {
@@ -56,20 +57,46 @@ const generateNewBoard = (clickedColor, oldBoard) => {
             }
         }
     }
-    console.log(oldBoard);
+    // console.log(oldBoard);
     return oldBoard;
 };
 
 // Game Play
 
+generateBoard();
 
 // Creating the board
- let gameBoard = [[],[],[]];
-
- function generateBoard(){
-     
+let gameBoard;
+function generateBoard(){
+     let rowMax = 3;
+     let columnMax=4;
+     gameBoard = [[],[],[]];
+     for (let i = 0; i <rowMax; i++){
+         for(let j = 0; j < columnMax; j++){
+             gameBoard[i][j] = _.sample([0,1,2,3,4])
+         }
+     }
+     gameBoard[0][0] = 0;
+     return gameBoard;
  }
 
+ // Listening for Button clicks
+
+let enemyButton = document.getElementByClassName("enemy-button");
+let counter = document.getElementById("counter")
+
+enemyButton.addEventListener("click", function(){
+   let clickedColor = this.innerHTML ;
+   generateNewBoard(clickedColor, gameBoard);
+    counter.innerHTML = parseInt(counter.innerHTML) - 1;
+   setInterval(onTimerTick, 3); // 3 milliseconds
+
+});
+
+function onTimerTick() {
+    isBoardComplete();
+    return oldBoard
+}
 
 
 
