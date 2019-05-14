@@ -111,12 +111,25 @@ function isGameOver() {
 document.getElementById("enemy-listener").addEventListener("click", function(){
     let clickedColor;
     clickedColor= event.target.textContent;
-        document.getElementById("counter").textContent = counter; // Update Counter display
-    invader(clickedColor);
+     invader(translateEnemyColor(clickedColor));
+    document.getElementById("counter").textContent = counter; // Update Counter display
+
 
 });
 
-
+// Translate Enemy color string to number
+function translateEnemyColor(colorString) {
+    switch(colorString){
+        case "Red":
+            return 1;
+        case "Yellow":
+            return 2;
+        case "Orange":
+            return 3;
+        case "Blue":
+            return 4;
+    }
+}
 
 
 
