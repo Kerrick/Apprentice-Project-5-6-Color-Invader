@@ -111,17 +111,14 @@ function isGameOver() {
 document.getElementById("enemy-listener").addEventListener("click", function(){
     let clickedColor;
     clickedColor= event.target.textContent;
-        document.getElementById("counter").textContent = counter;
+        document.getElementById("counter").textContent = counter; // Update Counter display
     invader(clickedColor);
 
 });
 
-// Update Counter display
 
-let counterDisplay =
-function counterDisplay () {
 
-}
+
 
 //
 // function onTimerTick() {
