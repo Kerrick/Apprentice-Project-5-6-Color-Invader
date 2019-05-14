@@ -107,13 +107,22 @@ function isGameOver() {
 
  // Listening for Button clicks
 
-// let enemyListener = document.getElementById("enemy-listener");
-// let counter = document.getElementById("counter")
-//
-// enemyListener.addEventListener("click", function(){
-//
-//
-// });
+
+document.getElementById("enemy-listener").addEventListener("click", function(){
+    let clickedColor;
+    clickedColor= event.target.textContent;
+        document.getElementById("counter").textContent = counter;
+    invader(clickedColor);
+
+});
+
+// Update Counter display
+
+let counterDisplay =
+function counterDisplay () {
+
+}
+
 //
 // function onTimerTick() {
 //     isBoardComplete(generateNewBoard(clickedColor, generateBoard()));
