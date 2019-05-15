@@ -12,19 +12,21 @@ const adjacentCoordinates = (coordinates, width, height) => {
     let x = coordinates[0];
     let y = coordinates[1];
     if (x === 0 && y === 0) {
-        return [[x, y + 1], [x + 1, y]];
+        return [[0, 1], [1, 0]];
     } else if (x + 1 === width && y + 1 === height) {
         return [[x - 1, y], [x, y - 1]];
-    } else if (x > 0 && y === 0) {
-        return [[x + 1, y], [x, y + 1], [x - 1, y]];
-    } else if (x === 0 && y === 2) {
-        return [[x, y - 1], [x + 1, y]];
-    } else if (x === 0 && y === 1) {
-        return [[x, y - 1], [x + 1, y], [x, y + 1]];
-    } else if (y > x && y + 1 === height) {
+    } else if (y === 0 && x+1 === width) {
+        return [[x-1, 0], [x, 1]];
+    } else if (x > 0 && x < width && y === 0) {
+        return [[x + 1, 0], [x, 1], [x - 1, 0]];
+    } else if (x === 0 && y+1 === height) {
+        return [[0, y - 1], [1, y]];
+    } else if (x === 0 && y < height) {
+        return [[0, y - 1], [1, y], [0, y + 1]];
+    } else if (x < width && y + 1 === height) {
         return [[x - 1, y], [x, y - 1], [x + 1, y]];
-    } else if (y == x && y + 1 === height) {
-        return [[x - 1, y], [x, y - 1], [x + 1, y]];
+    } else if (y > 0 && y < height && x + 1 === width) {
+        return [[x, y - 1], [x, y + 1], [x - 1, y]];
     } else {
         return [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]];
     }
@@ -173,39 +175,84 @@ QUnit.module("Utility Functions", () => {
         "The adjacentCoordinates() function gives you the indexes for cells that are adjacent to the one you passed",
         assert => {
             assert.deepEqual(
+                adjacentCoordinates([0, 0], 100, 100).sort(),
+                [[0, 1], [1, 0]].sort(),
+                "1: two are adjacent"
+            );
+            assert.deepEqual(
+                adjacentCoordinates([54, 0], 55, 65).sort(),
+                [[53, 0], [54, 1]].sort(),
+                "2: two are adjacent"
+            );
+            assert.deepEqual(
+                adjacentCoordinates([122, 596], 123, 597).sort(),
+                [[122, 595], [121, 596]].sort(),
+                "3: two are adjacent"
+            );
+            assert.deepEqual(
+                adjacentCoordinates([0, 15], 74, 16).sort(),
+                [[0, 14], [1, 15]].sort(),
+                "4: two are adjacent"
+            );
+            assert.deepEqual(
+                adjacentCoordinates([5, 0], 12, 23).sort(),
+                [[4, 0], [6, 0], [5, 1]].sort(),
+                "5: three are adjacent"
+            );
+            assert.deepEqual(
+                adjacentCoordinates([44, 17], 45, 32).sort(),
+                [[44, 16], [44, 18], [43, 17]].sort(),
+                "6: three are adjacent"
+            );
+            assert.deepEqual(
+                adjacentCoordinates([1234, 8975], 3425, 8976).sort(),
+                [[1233, 8975], [1235, 8975], [1234, 8974]].sort(),
+                "7: three are adjacent"
+            );
+            assert.deepEqual(
+                adjacentCoordinates([0, 3], 6, 9).sort(),
+                [[0, 2], [0, 4], [1, 3]].sort(),
+                "8: three are adjacent"
+            );
+            assert.deepEqual(
+                adjacentCoordinates([23, 50], 34, 56).sort(),
+                [[22, 50], [24, 50], [23, 49], [23, 51]].sort(),
+                "9: four are adjacent"
+            );
+            assert.deepEqual(
                 adjacentCoordinates([0, 0], 4, 3).sort(),
                 [[0, 1], [1, 0]].sort(),
-                "At the top left corner, only two are adjacent"
+                "10: two are adjacent"
             );
             assert.deepEqual(
                 adjacentCoordinates([6, 8], 7, 9).sort(),
                 [[5, 8], [6, 7]].sort(),
-                "At the bottom right corner, only two are adjacent"
+                "11: two are adjacent"
             );
             assert.deepEqual(
                 adjacentCoordinates([4, 7], 20, 10).sort(),
                 [[3, 7], [5, 7], [4, 6], [4, 8]].sort(),
-                "In the middle area, four are adjacent"
+                "12: four are adjacent"
             );
             assert.deepEqual(
                 adjacentCoordinates([1, 0], 4, 3).sort(),
                 [[2, 0], [1, 1], [0, 0]].sort(),
-                "In the top middle area, three are adjacent"
+                "13: three are adjacent"
             );
             assert.deepEqual(
                 adjacentCoordinates([0, 1], 4, 3).sort(),
                 [[0, 0], [1, 1], [0, 2]].sort(),
-                "In the middle left area, three are adjacent"
+                "14: three are adjacent"
             );
             assert.deepEqual(
                 adjacentCoordinates([0, 2], 4, 3).sort(),
                 [[0, 1], [1, 2]].sort(),
-                "In the bottom left area, two are adjacent"
+                "15: two are adjacent"
             );
             assert.deepEqual(
                 adjacentCoordinates([1, 2], 4, 3).sort(),
                 [[0, 2], [1, 1], [2, 2]].sort(),
-                "In the bottom middle area, three are adjacent"
+                "16: three are adjacent"
             );
         }
     );
