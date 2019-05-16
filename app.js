@@ -73,8 +73,9 @@ const generateNewBoard = (clickedColor, oldBoard) => {
 function generateBoard(){
      let rowMax = 32;
      let columnMax=20;
-     let gameBoard = [[],[],[]];
+     let gameBoard = [];
      for (let i = 0; i <rowMax; i++){
+         gameBoard.push([]) ;
          for(let j = 0; j < columnMax; j++){
              gameBoard[i][j] = _.sample([1,2,3,4])
          }
@@ -133,11 +134,7 @@ function translateEnemyColor(colorString) {
     }
 }
 
-//PostGame
 
-function postGame(gameStatus){
-    alert()
-}
 
 //
 // function onTimerTick() {
