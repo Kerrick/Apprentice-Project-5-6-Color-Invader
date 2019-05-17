@@ -8,16 +8,9 @@ let gameStatus = 'ongoing'; // values can be: ongoing, userWon, gameOver
 
 const gameBoard = document.getElementById('game-board');
 
-const isEnemy = cell => {
-    if (cell !== Grey) {
-        return true;
-    } else {
-        return false;
-    }
-};
-const adjacentCoordinates = (coordinates, width, height) => {
-    let x = coordinates[0];
-    let y = coordinates[1];
+const isEnemy = cell => cell !== Grey;
+
+const adjacentCoordinates = ([x, y], width, height) => {
     if (x === 0 && y === 0) {
         return [[0, 1], [1, 0]];
     } else if (x + 1 === width && y + 1 === height) {
@@ -72,16 +65,15 @@ const generateNewBoard = (clickedColor, oldBoard) => {
 // Create board
 createBoard(board);
 function createBoard(board){
-    let table = '<table>';
-    _.forEach(board, row => {
-        table += '<tr>';
-        for(let cell of row) {
-            `square--${colors[cell]}`
-            table += `<td class ="square--${colors[cell]} " > </td>`;
-        }
-        table += `</tr>`;
-    });
-    table += '</table>';
+    let table = `<table>
+    ${_.map(board, row =>
+        `<tr>
+        ${_.map(row, cell =>
+            `<td class ="square--${colors[cell]} " > </td>`
+        ).join('')}
+        </tr>`
+    ).join('')}
+    </table>`;
     gameBoard.innerHTML = table;
 }
 
@@ -91,13 +83,7 @@ function createBoard(board){
 function randomizeBoard(){
      let rowMax = 32;
      let columnMax=20;
-     let gameBoard = [];
-     _.times(rowMax, i => {
-         gameBoard.push([]) ;
-         _.times(columnMax, j => {
-             gameBoard[i][j] = _.sample([1,2,3,4])
-         });
-     })
+     let gameBoard = _.times(rowMax).map(() => _.times(columnMax).map(() => _.sample([1, 2, 3, 4])));
      gameBoard[0][0] = 0; // Top left should aways be Grey
         return gameBoard;
  }
@@ -137,16 +123,7 @@ document.getElementById("enemy-listener").addEventListener("click", function(){
 
 // Translate Enemy color string to number
 function translateEnemyColor(colorString) {
-    switch(colorString){
-        case "Red":
-            return 1;
-        case "Yellow":
-            return 2;
-        case "Orange":
-            return 3;
-        case "Blue":
-            return 4;
-    }
+    return colors.indexOf(colorString.toLowerCase());
 }
 
 
