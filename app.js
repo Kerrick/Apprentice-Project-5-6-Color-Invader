@@ -1,5 +1,12 @@
 const [Grey, Red, Yellow, Orange, Blue] = [0, 1, 2, 3, 4];
+const colors = ['grey', 'red', 'yellow', 'orange', 'blue'];
+// Game Play Model
 
+let counter = 100;
+let board = randomizeBoard();
+let gameStatus = 'ongoing'; // values can be: ongoing, userWon, gameOver
+
+const gameBoard = document.getElementById('game-board');
 
 const isEnemy = cell => {
     if (cell !== Grey) {
@@ -62,15 +69,29 @@ const generateNewBoard = (clickedColor, oldBoard) => {
             }
         }
     }
-    // console.log(oldBoard);
     return oldBoard;
 };
 
+// Create board
+createBoard(board);
+function createBoard(board){
+    let table = '<table>';
+    for(let row of board){
+        table += '<tr>';
+        for(let cell of row) {
+            `square--${colors[cell]}`
+            table += `<td class =\`square--${colors[cell]}\` > ${cell}</td>`;
+        }
+        table += `</tr>`;
+    }
+    table += '</table>';
+    gameBoard.innerHTML = table;
+}
 
 
-// Creating the board
+// Randomize the board
 
-function generateBoard(){
+function randomizeBoard(){
      let rowMax = 32;
      let columnMax=20;
      let gameBoard = [];
@@ -84,11 +105,7 @@ function generateBoard(){
         return gameBoard;
  }
 
-// Game Play Model
 
-let counter = 100;
-let board = generateBoard();
-let gameStatus = 'ongoing'; // values can be: ongoing, userWon, gameOver
 
 // Game Play controller
 
@@ -138,7 +155,7 @@ function translateEnemyColor(colorString) {
 
 //
 // function onTimerTick() {
-//     isBoardComplete(generateNewBoard(clickedColor, generateBoard()));
+//     isBoardComplete(generateNewBoard(clickedColor, randomizeBoard()));
 //     // return oldBoard
 // }
 
