@@ -47,28 +47,25 @@ const changeAdjacentCellsRecursively = (board, x, y, clickedColor) => {
         board[0].length,
         board.length
     );
-    for (let coordinatepair of coordinatepairs) {
-        let [adjx, adjy] = coordinatepair;
+    _.forEach(coordinatepairs, ([adjx, adjy]) => {
         if (board[adjy][adjx] === clickedColor) {
             board[adjy][adjx] = Grey;
             changeAdjacentCellsRecursively(board, adjx, adjy, clickedColor);
         }
-    }
+    });
     return;
 };
 
 const generateNewBoard = (clickedColor, oldBoard) => {
-    for (let i = 0; i < oldBoard.length; i++) {
-        let row = oldBoard[i];
-        for (let j = 0; j < row.length; j++) {
-            let cell = row[j];
+    _.forEach(oldBoard, (row, i) => {
+        _.forEach(row, (cell, j) => {
             if (cell === Grey) {
                 let x = j;
                 let y = i;
                 changeAdjacentCellsRecursively(oldBoard, x, y, clickedColor);
             }
-        }
-    }
+        });
+    });
     return oldBoard;
 };
 
@@ -76,14 +73,14 @@ const generateNewBoard = (clickedColor, oldBoard) => {
 createBoard(board);
 function createBoard(board){
     let table = '<table>';
-    for(let row of board){
+    _.forEach(board, row => {
         table += '<tr>';
         for(let cell of row) {
             `square--${colors[cell]}`
             table += `<td class ="square--${colors[cell]} " > </td>`;
         }
         table += `</tr>`;
-    }
+    });
     table += '</table>';
     gameBoard.innerHTML = table;
 }
@@ -95,12 +92,12 @@ function randomizeBoard(){
      let rowMax = 32;
      let columnMax=20;
      let gameBoard = [];
-     for (let i = 0; i <rowMax; i++){
+     _.times(rowMax, i => {
          gameBoard.push([]) ;
-         for(let j = 0; j < columnMax; j++){
+         _.times(columnMax, j => {
              gameBoard[i][j] = _.sample([1,2,3,4])
-         }
-     }
+         });
+     })
      gameBoard[0][0] = 0; // Top left should aways be Grey
         return gameBoard;
  }
