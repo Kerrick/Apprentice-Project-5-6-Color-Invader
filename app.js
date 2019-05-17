@@ -111,6 +111,7 @@ function randomizeBoard(){
 
 function invader(clickedColor){
     board = generateNewBoard(clickedColor,board);
+    createBoard(board);
     counter -= 1;
     isGameOver();
 }
