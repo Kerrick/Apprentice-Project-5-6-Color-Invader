@@ -80,7 +80,7 @@ function createBoard(board){
         table += '<tr>';
         for(let cell of row) {
             `square--${colors[cell]}`
-            table += `<td class =\`square--${colors[cell]}\` > ${cell}</td>`;
+            table += `<td class ="square--${colors[cell]} " > </td>`;
         }
         table += `</tr>`;
     }

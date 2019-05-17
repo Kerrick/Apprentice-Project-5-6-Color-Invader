@@ -1,0 +1,55 @@
+body {
+    position: relative;
+    width: 50%;
+    align-content: center;
+}
+
+#game-board {
+    border: solid black;
+    margin: 0;
+    padding: 0;
+    border-collapse: collapse;
+
+
+}
+
+[class|="square"]{
+    height: 50px;
+    width: 50px;
+    padding: 0;
+    margin: 0;
+    font-size: 0px;
+    line-height: 0px;
+
+
+}
+
+.square--grey {
+    background-color: #D3D3D3;
+}
+
+.square--yellow{
+    background-color: #F7B538;
+
+}
+
+.square--red{
+    background-color: #720026;
+
+}
+
+.square--blue{
+    background-color: #7B8CDE;
+
+}
+
+.square--orange{
+    background-color: #E9724C;
+
+}
+
+button {
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
