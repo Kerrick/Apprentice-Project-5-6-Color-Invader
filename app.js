@@ -118,9 +118,9 @@ function invader(clickedColor){
 function isGameOver() {
     let isComplete = isBoardComplete(board);
     if(isComplete){
-        return gameStatus = 'userWon';
+        return gameStatus = alert('userWon');
     } else if(!isComplete && counter == 0) {
-        return gameStatus= 'gameOver';
+        return gameStatus= alert('gameOver');
     } else {
         return gameStatus = 'ongoing';
     }
