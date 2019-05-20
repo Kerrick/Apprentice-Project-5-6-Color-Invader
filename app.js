@@ -1,10 +1,50 @@
-const [Grey, Red, Yellow, Orange, Blue] = [0, 1, 2, 3, 4];
+const COLOR_VALUES = [0, 1, 2, 3, 4];
+const [Grey, Red, Yellow, Orange, Blue] = COLOR_VALUES;
 const colors = ['grey', 'red', 'yellow', 'orange', 'blue'];
-// Game Play Model
 
-let counter = 100;
-let board = randomizeBoard();
-let gameStatus = 'ongoing'; // values can be: ongoing, userWon, gameOver
+// Utilities
+const isSquare = array => array.every(inner => inner.length === array[0].length);
+const twoLevelEvery = (array, test) => array.every(inner => inner.every(test));
+
+// Game Play Model
+class GameState {
+    constructor(initialCounter = 100, boardWidth = 20, boardHeight = 32) {
+        this.counter = initialCounter;
+        this.board = GameState.randomizedBoard(boardWidth, boardHeight);
+        this.status = 'ongoing';
+    }
+    decrementCounter() {
+        this.counter -= 1;
+        return this.counter;
+    }
+    get status() {
+        return this._status;
+    }
+    set status(value) {
+        if (!['ongoing', 'userWon', 'gameOver'].includes(value)) {
+            throw new Error(`${value} is not a valid status.`);
+        }
+        this._status = value;
+        return value;
+    }
+    get board() {
+        return this._board;
+    }
+    set board(value) {
+        if (!Array.isArray(value) || !isSquare(value) || !twoLevelEvery(value, cell => COLOR_VALUES.includes(cell))) {
+            throw new Error(`${value} is not a valid board.`);
+        }
+        this._board = value;
+        return value;
+    }
+    static randomizedBoard(columnMax, rowMax){
+        let gameBoard = _.times(rowMax).map(() => _.times(columnMax).map(() => _.sample([1, 2, 3, 4])));
+        gameBoard[0][0] = 0; // Top left should aways be Grey
+        return gameBoard;
+    }
+}
+
+let model = new GameState(100, 20, 32);
 
 const gameBoard = document.getElementById('game-board');
 
@@ -63,7 +103,7 @@ const generateNewBoard = (clickedColor, oldBoard) => {
 };
 
 // Create board
-createBoard(board);
+createBoard(model.board);
 function createBoard(board){
     let table = `<table>
     ${_.map(board, row =>
@@ -80,29 +120,21 @@ function createBoard(board){
 
 // Randomize the board
 
-function randomizeBoard(){
-     let rowMax = 32;
-     let columnMax=20;
-     let gameBoard = _.times(rowMax).map(() => _.times(columnMax).map(() => _.sample([1, 2, 3, 4])));
-     gameBoard[0][0] = 0; // Top left should aways be Grey
-        return gameBoard;
- }
-
 
 
 // Game Play controller
 
 function invader(clickedColor){
-    board = generateNewBoard(clickedColor,board);
-    createBoard(board);
-    counter -= 1;
+    model.board = generateNewBoard(clickedColor, model.board);
+    createBoard(model.board);
+    model.decrementCounter();
     isGameOver();
 }
 function isGameOver() {
-    let isComplete = isBoardComplete(board);
+    let isComplete = isBoardComplete(model.board);
     if(isComplete){
         return gameStatus = alert('userWon');
-    } else if(!isComplete && counter == 0) {
+    } else if(!isComplete && model.counter == 0) {
         return gameStatus= alert('gameOver');
     } else {
         return gameStatus = 'ongoing';
@@ -116,7 +148,7 @@ document.getElementById("enemy-listener").addEventListener("click", function(){
     let clickedColor;
     clickedColor= event.target.textContent;
      invader(translateEnemyColor(clickedColor));
-    document.getElementById("counter").textContent = counter; // Update Counter display
+    document.getElementById("counter").textContent = model.counter; // Update Counter display
 
 
 });
